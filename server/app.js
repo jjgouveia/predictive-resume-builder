@@ -79,12 +79,12 @@ app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
         return stringText;
     };
     //👇🏻 The job description prompt
-    const prompt1 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} (${currentLength} anos). \n Eu desenvolvo em: ${currentTechnologies}. Você pode escrever uma descrição com 100 palavras para o topo do meu currículo (escrita em primeira pessoa)?`;
+    const prompt1 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} (${currentLength} anos). \n Eu desenvolvo em: ${currentTechnologies}. Você pode escrever uma descrição com até 150 palavras para o topo do meu currículo (escrita em primeira pessoa)?`;
     //👇🏻 The job responsibilities prompt
     const prompt2 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} (${currentLength} anos). \n Eu desenvolvo em: ${currentTechnologies}. Você pode escrever 10 pontos em que sou bom a partir dessas características?`;
     //👇🏻 The job achievements prompt
     const prompt3 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} (${currentLength} anos). \n Trabalhei em ${workArray.length
-        } empresas. ${remainderText()} \n Você pode escrever 50 palavras para cada empresa de acordo com a minha função (em primeira pessoa)?`;
+        } empresas. ${remainderText()} \n Você pode escrever até 100 palavras para cada empresa de acordo com a minha função (em primeira pessoa)?`;
 
     //👇🏻 generate a GPT-3 result
     const objective = await GPTFunction(prompt1);
