@@ -111,7 +111,7 @@ const Home = () => {
                         />
                     </div>
                 </div>
-                <label htmlFor='photo'>Upload de foto de perfil</label>
+                <label htmlFor='photo'>Upload da foto de perfil</label>
                 <input
                     type='file'
                     name='photo'
@@ -158,7 +158,7 @@ const Home = () => {
                 </div>
             ))}
 
-                <button>CREATE RESUME</button>
+                <button>CRIAR CURRÍCULO</button>
             </form>
         </div>
     );
