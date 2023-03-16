@@ -8,7 +8,7 @@ const Resume = ({ result }) => {
 
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
-        documentTitle: `${result.fullName} Resume`,
+        documentTitle: `${result.fullName} Currículo`,
         onAfterPrint: () => alert("Print Successful!"),
     });
 
@@ -20,8 +20,6 @@ const Resume = ({ result }) => {
         return <ErrorPage />;
     }
 
-
-    
 
     return (
         <>
