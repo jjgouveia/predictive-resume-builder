@@ -4,7 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 
-const Home = () => {
+const Home = ({ setResult }) => {
     const [fullName, setFullName] = useState("");
     const [currentPosition, setCurrentPosition] = useState("");
     const [currentLength, setCurrentLength] = useState(1);
@@ -29,6 +29,7 @@ const Home = () => {
             .post("http://localhost:3001/resume/create", formData, {})
             .then((res) => {
                 if (res.data.message) {
+                    setResult(res.data.data);
                     navigate("/resume");
                 }
             })
