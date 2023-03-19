@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import Loading from "./Loading";
+import { useNavigate } from "react-router-dom";
+import sendResume from "../utils/util";
 
 const SendResume = () => {
     const [companyName, setCompanyName] = useState("");
@@ -8,11 +11,38 @@ const SendResume = () => {
     const [recruiterEmail, setRecruiterEmail] = useState("");
     const [myEmail, setMyEmail] = useState("");
     const [resume, setResume] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    if (loading) {
+        return <Loading />;
+    }
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        console.log("Submit button clicked!");
+//👇🏻 form object
+    const formData = new FormData();
+    formData.append("resume", resume, resume.name);
+    formData.append("companyName", companyName);
+    formData.append("companyDescription", companyDescription);
+    formData.append("jobTitle", jobTitle);
+    formData.append("recruiterEmail", recruiterEmail);
+    formData.append("recruiterName", recruiterName);
+    formData.append("myEmail", myEmail);
+//👇🏻 imported function
+    sendResume(formData, setLoading, navigate);
+
+//👇🏻 states update
+    setMyEmail("");
+    setRecruiterEmail("");
+    setRecruiterName("");
+    setJobTitle("");
+    setCompanyName("");
+    setCompanyDescription("");
+    setResume(null);
     };
+
+    
 
     return (
         <div className='app'>
