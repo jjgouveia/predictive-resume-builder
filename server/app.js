@@ -11,6 +11,10 @@ app.use(express.json());
 app.use(cors());
 app.use("/uploads", express.static("uploads"));
 
+const workArray = []
+const applicantName = ""
+const technologies = ""
+
 const generateID = () => Math.random().toString(36).substring(2, 10);
 
 const configuration = new Configuration({
@@ -23,7 +27,7 @@ const GPTFunction = async (text) => {
     const response = await openai.createCompletion({
         model: "text-davinci-003",
         prompt: text,
-        temperature: 0.5,
+        temperature: 0.7,
         max_tokens: 500,
         top_p: 1,
         frequency_penalty: 1,
@@ -49,9 +53,7 @@ const upload = multer({
 
 let database = [];
 
-const workArray = []
-const applicantName = ""
-const technologies = ""
+
 
 const remainderText = () => {
     let stringText = "";
@@ -70,7 +72,7 @@ app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
         workHistory,
     } = req.body;
 
-    const workArray = JSON.parse(workHistory);
+    workArray = JSON.parse(workHistory);
     applicantName = fullName;
     technologies = currentTechnologies;
 
@@ -111,14 +113,15 @@ app.post("/resume/send", upload.single("resume"), async (req, res) => {
         recruiterName,
         jobTitle,
         myEmail,
+        myName,
         recruiterEmail,
         companyName,
         companyDescription,
     } = req.body;
 
-    const prompt = `Meu nome é ${applicantName}. Eu quero trabalhar na/no ${companyName}, eles são ${companyDescription}
-    Estou me candidatando para a vaga de ${jobTitle}. Eu já trabalhei na: ${remainderText()}
-    E eu usei tecnologias como ${technologies}
+    const prompt = `Meu nome é ${applicantName || myName}. Eu quero trabalhar na/no ${companyName}, eles são ${companyDescription}
+    Estou me candidatando para a vaga de ${jobTitle}. Tenho 2 anos de experiência prática. Eu já trabalhei na: ${remainderText()}
+    e eu usei tecnologias como ${technologies}
     Eu quero enviar um "cold email" para ${recruiterName}, meu currículo e escrever porque eu combino com a empresa e com a vaga.
     Você pode escrever um email em tom amigável e não oficial? Sem assunto, com no máximo 300 palavras e que diga que meu currículo está anexado ao email.`;
 
@@ -130,7 +133,7 @@ app.post("/resume/send", upload.single("resume"), async (req, res) => {
             cover_letter: coverLetter,
             recruiter_email: recruiterEmail,
             my_email: myEmail,
-            applicant_name: applicantName,
+            applicant_name: applicantName || myName,
             resume: `http://localhost:${process.env.PORT}/uploads/${req.file.filename}`,
         },
     });
