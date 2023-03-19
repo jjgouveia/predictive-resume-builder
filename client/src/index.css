@@ -109,3 +109,42 @@ button {
     text-align: justify;
     margin-bottom: 30px;
 }
+
+.buttonGroup {
+    padding: 20px;
+    width: 60%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+}
+.sendEmail {
+    background-color: #f99417;
+    padding: 20px;
+    text-decoration: none;
+    border-radius: 3px;
+}
+.resume__title {
+    margin-bottom: 30px;
+}
+.companyDescription {
+    padding: 15px;
+    border: 1px solid #e8e2e2;
+    border-radius: 3px;
+    margin-bottom: 15px;
+}
+.sendEmailBtn {
+    width: 200px;
+}
+.nestedItem {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+.nestedItem > input {
+    width: 95%;
+}
+

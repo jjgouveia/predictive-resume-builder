@@ -24,7 +24,7 @@ const GPTFunction = async (text) => {
         model: "text-davinci-003",
         prompt: text,
         temperature: 0.6,
-        max_tokens: 250,
+        max_tokens: 500,
         top_p: 1,
         frequency_penalty: 1,
         presence_penalty: 1,
@@ -55,10 +55,10 @@ app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
         currentPosition,
         currentLength,
         currentTechnologies,
-        workHistory, //JSON format
+        workHistory,
     } = req.body;
 
-    const workArray = JSON.parse(workHistory); //an array
+    const workArray = JSON.parse(workHistory);
 
     const newEntry = {
         id: generateID(),
@@ -70,7 +70,6 @@ app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
         workHistory: workArray,
     };
 
-    //👇🏻 loops through the items in the workArray and converts them to a string
     const remainderText = () => {
         let stringText = "";
         for (let i = 0; i < workArray.length; i++) {
@@ -78,23 +77,17 @@ app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
         }
         return stringText;
     };
-    //👇🏻 The job description prompt
-    const prompt1 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} (${currentLength} anos). \n Eu desenvolvo em: ${currentTechnologies}. Você pode escrever uma descrição com até 150 palavras para o topo do meu currículo (escrita em primeira pessoa)?`;
-    //👇🏻 The job responsibilities prompt
-    const prompt2 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} (${currentLength} anos). \n Eu desenvolvo em: ${currentTechnologies}. Você pode escrever 10 pontos em que sou bom a partir dessas características?`;
-    //👇🏻 The job achievements prompt
-    const prompt3 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} (${currentLength} anos). \n Trabalhei em ${workArray.length
-        } empresas. ${remainderText()} \n Você pode escrever até 100 palavras para cada empresa de acordo com a minha função (em primeira pessoa)?`;
+    
+    const prompt1 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} por (${currentLength} ano(s)). \n Eu desenvolvo em: ${currentTechnologies}. Você pode escrever uma descrição com até 100 palavras para o topo do meu currículo (escrita em primeira pessoa)?`;
+    const prompt2 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} por (${currentLength} ano(s)). \n Eu desenvolvo em: ${currentTechnologies}. Você pode escrever 10 pontos em que sou bom a partir dessas características?`;
+    const prompt3 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} por (${currentLength} ano(s)). \n Trabalhei em ${workArray.length
+        } empresa(s). ${remainderText()} \n Você pode escrever até 50 palavras para cada empresa de acordo com a minha função (em primeira pessoa)?`;
 
-    //👇🏻 generate a GPT-3 result
     const objective = await GPTFunction(prompt1);
     const keypoints = await GPTFunction(prompt2);
     const jobResponsibilities = await GPTFunction(prompt3);
-    //👇🏻 put them into an object
     const chatgptData = { objective, keypoints, jobResponsibilities };
-    //👇🏻log the result
-    console.log(chatgptData);
-
+   
 
     const data = { ...newEntry, ...chatgptData };
     database.push(data);
@@ -106,9 +99,9 @@ app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
 });
 
 
-app.get("/api", (req, res) => {
+app.get("/cirrus", (req, res) => {
     res.json({
-        message: "Hello world",
+        message: "A Doodly Creation",
     });
 });
 

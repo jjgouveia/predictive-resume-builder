@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import ErrorPage from "./ErrorPage";
 import { useReactToPrint } from "react-to-print";
+import { Link } from "react-router-dom";
 
 const Resume = ({ result }) => {
 
@@ -23,7 +24,12 @@ const Resume = ({ result }) => {
 
     return (
         <>
-        <button onClick={handlePrint}>Imprimir a página</button>
+        <div className='buttonGroup'>
+				<button onClick={handlePrint}>Imprimir</button>
+				<Link to='/send/resume' className='sendEmail'>
+					Enviar por email
+				</Link>
+			</div>
         <main className='container' ref={componentRef}>
             <header className='header'>
                 <div>
