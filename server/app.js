@@ -98,6 +98,29 @@ app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
     });
 });
 
+app.post("/resume/send", upload.single("resume"), async (req, res) => {
+    const {
+        recruiterName,
+        jobTitle,
+        myEmail,
+        recruiterEmail,
+        companyName,
+        companyDescription,
+    } = req.body;
+
+    //👇🏻 log the contents
+    console.log({
+        recruiterName,
+        jobTitle,
+        myEmail,
+        recruiterEmail,
+        companyName,
+        companyDescription,
+        resume: `http://localhost:${process.env.PORT}/uploads/${req.file.filename}`,
+    });
+});
+
+
 
 app.get("/cirrus", (req, res) => {
     res.json({
