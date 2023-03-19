@@ -23,7 +23,7 @@ const GPTFunction = async (text) => {
     const response = await openai.createCompletion({
         model: "text-davinci-003",
         prompt: text,
-        temperature: 0.6,
+        temperature: 0.5,
         max_tokens: 500,
         top_p: 1,
         frequency_penalty: 1,
@@ -49,6 +49,18 @@ const upload = multer({
 
 let database = [];
 
+const workArray = []
+const applicantName = ""
+const technologies = ""
+
+const remainderText = () => {
+    let stringText = "";
+    for (let i = 0; i < workArray.length; i++) {
+        stringText += ` ${workArray[i].name} as a ${workArray[i].position}.`;
+    }
+    return stringText;
+};
+
 app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
     const {
         fullName,
@@ -59,6 +71,8 @@ app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
     } = req.body;
 
     const workArray = JSON.parse(workHistory);
+    applicantName = fullName;
+    technologies = currentTechnologies;
 
     const newEntry = {
         id: generateID(),
@@ -70,14 +84,8 @@ app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
         workHistory: workArray,
     };
 
-    const remainderText = () => {
-        let stringText = "";
-        for (let i = 0; i < workArray.length; i++) {
-            stringText += ` ${workArray[i].name} as a ${workArray[i].position}.`;
-        }
-        return stringText;
-    };
-    
+
+
     const prompt1 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} por (${currentLength} ano(s)). \n Eu desenvolvo em: ${currentTechnologies}. Você pode escrever uma descrição com até 100 palavras para o topo do meu currículo (escrita em primeira pessoa)?`;
     const prompt2 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} por (${currentLength} ano(s)). \n Eu desenvolvo em: ${currentTechnologies}. Você pode escrever 10 pontos em que sou bom a partir dessas características?`;
     const prompt3 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} por (${currentLength} ano(s)). \n Trabalhei em ${workArray.length
@@ -87,7 +95,7 @@ app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
     const keypoints = await GPTFunction(prompt2);
     const jobResponsibilities = await GPTFunction(prompt3);
     const chatgptData = { objective, keypoints, jobResponsibilities };
-   
+
 
     const data = { ...newEntry, ...chatgptData };
     database.push(data);
@@ -108,15 +116,23 @@ app.post("/resume/send", upload.single("resume"), async (req, res) => {
         companyDescription,
     } = req.body;
 
-    //👇🏻 log the contents
-    console.log({
-        recruiterName,
-        jobTitle,
-        myEmail,
-        recruiterEmail,
-        companyName,
-        companyDescription,
-        resume: `http://localhost:${process.env.PORT}/uploads/${req.file.filename}`,
+    const prompt = `Meu nome é ${applicantName}. Eu quero trabalhar na/no ${companyName}, eles são ${companyDescription}
+    Estou me candidatando para a vaga de ${jobTitle}. Eu já trabalhei na: ${remainderText()}
+    E eu usei tecnologias como ${technologies}
+    Eu quero enviar um "cold email" para ${recruiterName}, meu currículo e escrever porque eu combino com a empresa e com a vaga.
+    Você pode escrever um email em tom amigável e não oficial? Sem assunto, com no máximo 300 palavras e que diga que meu currículo está anexado ao email.`;
+
+    const coverLetter = await GPTFunction(prompt);
+
+    res.json({
+        message: "Request successful",
+        data: {
+            cover_letter: coverLetter,
+            recruiter_email: recruiterEmail,
+            my_email: myEmail,
+            applicant_name: applicantName,
+            resume: `http://localhost:${process.env.PORT}/uploads/${req.file.filename}`,
+        },
     });
 });
 
