@@ -8,6 +8,7 @@ const SendResume = () => {
     const [jobTitle, setJobTitle] = useState("");
     const [companyDescription, setCompanyDescription] = useState("");
     const [recruiterName, setRecruiterName] = useState("");
+    const [myName, setMyName] = useState("");
     const [recruiterEmail, setRecruiterEmail] = useState("");
     const [myEmail, setMyEmail] = useState("");
     const [resume, setResume] = useState(null);
@@ -28,6 +29,7 @@ const SendResume = () => {
     formData.append("jobTitle", jobTitle);
     formData.append("recruiterEmail", recruiterEmail);
     formData.append("recruiterName", recruiterName);
+    formData.append("myName", myName);
     formData.append("myEmail", myEmail);
 //👇🏻 imported function
     sendResume(formData, setLoading, navigate);
@@ -36,6 +38,7 @@ const SendResume = () => {
     setMyEmail("");
     setRecruiterEmail("");
     setRecruiterName("");
+    setMyName("");
     setJobTitle("");
     setCompanyName("");
     setCompanyDescription("");
@@ -49,6 +52,17 @@ const SendResume = () => {
             <h1 className='resume__title'>Enviar currículo por email</h1>
             <form onSubmit={handleFormSubmit} encType='multipart/form-data'>
                 <div className='nestedContainer'>
+                    <div className='nestedItem'>
+                        <label htmlFor='recruiterName'>Meu nome</label>
+                        <input
+                            type='text'
+                            value={myName}
+                            required
+                            onChange={(e) => setMyName(e.target.value)}
+                            id='myName'
+                            className='myName'
+                        />
+                    </div>
                     <div className='nestedItem'>
                         <label htmlFor='recruiterName'>Nome do recrutador</label>
                         <input
