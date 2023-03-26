@@ -5,17 +5,19 @@ const multer = require("multer");
 const path = require("path");
 const app = express();
 const { Configuration, OpenAIApi } = require("openai");
+const crypto = require("crypto")
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 app.use("/uploads", express.static("uploads"));
 
-const workArray = []
-const applicantName = ""
-const technologies = ""
+let workArray = []
+let applicantName = ""
+let technologies = ""
 
-const generateID = () => Math.random().toString(36).substring(2, 10);
+// const generateID = () => Math.random().toString(36).substring(2, 10);
+const generateID = crypto.randomUUID({ disableEntropyCache: true })
 
 const configuration = new Configuration({
     apiKey: process.env.OPEN_AI_TOKEN,
@@ -58,7 +60,7 @@ let database = [];
 const remainderText = () => {
     let stringText = "";
     for (let i = 0; i < workArray.length; i++) {
-        stringText += ` ${workArray[i].name} as a ${workArray[i].position}.`;
+        stringText += ` ${workArray[i].name} como ${workArray[i].position}.`;
     }
     return stringText;
 };
@@ -77,7 +79,7 @@ app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
     technologies = currentTechnologies;
 
     const newEntry = {
-        id: generateID(),
+        id: generateID,
         fullName,
         image_url: `http://localhost:3001/uploads/${req.file.filename}`,
         currentPosition,
