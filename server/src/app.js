@@ -1,11 +1,11 @@
 require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
-const multer = require("multer");
 const path = require("path");
 const app = express();
-const { Configuration, OpenAIApi } = require("openai");
-const crypto = require("crypto")
+const crypto = require("crypto");
+const { default: GPTFunction } = require('./core/functions/gptFunction');
+const upload = require('./core/functions/multerUtils');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -17,39 +17,39 @@ let applicantName = ""
 let technologies = ""
 
 const generateID = crypto.randomUUID({ disableEntropyCache: true })
-const configuration = new Configuration({
-    apiKey: process.env.OPEN_AI_TOKEN,
-});
+// const configuration = new Configuration({
+//     apiKey: process.env.OPEN_AI_TOKEN,
+// });
 
-const openai = new OpenAIApi(configuration);
+// const openai = new OpenAIApi(configuration);
 
-const GPTFunction = async (text) => {
-    const response = await openai.createCompletion({
-        model: "text-davinci-003",
-        prompt: text,
-        temperature: 0.7,
-        max_tokens: 500,
-        top_p: 1,
-        frequency_penalty: 1,
-        presence_penalty: 1,
-    });
-    return response.data.choices[0].text;
-};
+// const GPTFunction = async (text) => {
+//     const response = await openai.createCompletion({
+//         model: "text-davinci-003",
+//         prompt: text,
+//         temperature: 0.7,
+//         max_tokens: 500,
+//         top_p: 1,
+//         frequency_penalty: 1,
+//         presence_penalty: 1,
+//     });
+//     return response.data.choices[0].text;
+// };
 
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "uploads");
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
-    },
-});
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, "uploads");
+//     },
+//     filename: (req, file, cb) => {
+//         cb(null, Date.now() + path.extname(file.originalname));
+//     },
+// });
 
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 1024 * 1024 * 5 },
-});
+// const upload = multer({
+//     storage: storage,
+//     limits: { fileSize: 1024 * 1024 * 5 },
+// });
 
 let database = [];
 

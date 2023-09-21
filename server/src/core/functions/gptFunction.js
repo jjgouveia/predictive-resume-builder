@@ -19,5 +19,4 @@ const GPTFunction = async (text) => {
     });
     return response.data.choices[0].text;
 };
-
-export default GPTFunction;
+module.export = GPTFunction;
