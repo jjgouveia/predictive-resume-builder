@@ -1,6 +1,5 @@
 const crypto = require("crypto");
 const { OpenAIApi, Configuration } = require('openai');
-require('dotenv').config();
 
 let workArray = []
 let applicantName = ""
@@ -39,8 +38,9 @@ const remainderText = () => {
     return stringText;
 };
 
-module.exports = {
+let cLength;
 
+module.exports = {
     async createResume (req, res) {
         const {
             fullName,
@@ -53,6 +53,7 @@ module.exports = {
         workArray = JSON.parse(workHistory);
         applicantName = fullName;
         technologies = currentTechnologies;
+        cLength = currentLength;
 
         const newEntry = {
             id: generateID,
@@ -64,12 +65,10 @@ module.exports = {
             workHistory: workArray,
         };
 
-
-
-        const prompt1 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} por (${currentLength} ano(s)). \n Eu desenvolvo em: ${currentTechnologies}. Você pode escrever uma descrição com até 100 palavras para o topo do meu currículo (escrita em primeira pessoa)?`;
-        const prompt2 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} por (${currentLength} ano(s)). \n Eu desenvolvo em: ${currentTechnologies}. Você pode escrever 10 pontos em que sou bom a partir dessas características?`;
+        const prompt1 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} por (${currentLength} ano(s)). \n Eu desenvolvo em: ${currentTechnologies}. Você pode escrever uma descrição com até 100 palavras para o topo do meu currículo (escrita em primeira pessoa)? Evite redundâncias e seja o mais objetivo e realista possível levando em consideração o tempo de experiência que possuo.`;
+        const prompt2 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} por (${currentLength} ano(s)). \n Eu desenvolvo em: ${currentTechnologies}. Escrever 5 pontos em que sou bom a partir dessas características. Você deve escrever até 60 palavras para cada ponto (escrita em primeira pessoa).`;
         const prompt3 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} por (${currentLength} ano(s)). \n Trabalhei em ${workArray.length
-            } empresa(s). ${remainderText()} \n Você pode escrever até 50 palavras para cada empresa de acordo com a minha função (em primeira pessoa)?`;
+            } empresa(s). ${remainderText()} \n Você pode escrever até 46 palavras para cada empresa de acordo com a minha função (em primeira pessoa)?`;
 
         const objective = await GPTFunction(prompt1);
         const keypoints = await GPTFunction(prompt2);
@@ -98,7 +97,7 @@ module.exports = {
         } = req.body;
 
         const prompt = `Meu nome é ${applicantName || myName}. Eu quero trabalhar na/no ${companyName}, eles são ${companyDescription}
-    Estou me candidatando para a vaga de ${jobTitle}. Tenho 2 anos de experiência prática. Eu já trabalhei na: ${remainderText()}
+    Estou me candidatando para a vaga de ${jobTitle}. Tenho ${cLength} anos de experiência prática. Eu já trabalhei na: ${remainderText()}
     e eu usei tecnologias como ${technologies}
     Eu quero enviar um "cold email" para ${recruiterName}, juntamento com meu currículo e escrever porque eu combino com a empresa e com a vaga.
     Você pode escrever um email em tom amigável e não oficial? Sem assunto, com no máximo 300 palavras e que diga que meu currículo está anexado ao email.`;
