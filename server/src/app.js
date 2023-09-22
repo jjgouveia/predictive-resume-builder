@@ -1,11 +1,13 @@
 require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
-const path = require("path");
 const app = express();
 const crypto = require("crypto");
 const { default: GPTFunction } = require('./core/functions/gptFunction');
 const upload = require('./core/functions/multerUtils');
+const swaggerDocs = require('./swagger-docs');
+const swaggerUi = require('swagger-ui-express');
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -15,6 +17,9 @@ app.use("/uploads", express.static("uploads"));
 let workArray = []
 let applicantName = ""
 let technologies = ""
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 
 const generateID = crypto.randomUUID({ disableEntropyCache: true })
 // const configuration = new Configuration({
