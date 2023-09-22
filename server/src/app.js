@@ -3,11 +3,9 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const crypto = require("crypto");
-const { default: GPTFunction } = require('./core/functions/gptFunction');
 const upload = require('./core/functions/multerUtils');
-const swaggerDocs = require('./swagger-docs');
-const swaggerUi = require('swagger-ui-express');
-
+const { OpenAIApi, Configuration } = require('openai');
+const resumeController = require('./controllers/resume.controller');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -18,43 +16,26 @@ let workArray = []
 let applicantName = ""
 let technologies = ""
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
-
 const generateID = crypto.randomUUID({ disableEntropyCache: true })
-// const configuration = new Configuration({
-//     apiKey: process.env.OPEN_AI_TOKEN,
-// });
+const configuration = new Configuration({
+    apiKey: process.env.OPEN_AI_TOKEN,
+});
 
-// const openai = new OpenAIApi(configuration);
+const openai = new OpenAIApi(configuration);
 
-// const GPTFunction = async (text) => {
-//     const response = await openai.createCompletion({
-//         model: "text-davinci-003",
-//         prompt: text,
-//         temperature: 0.7,
-//         max_tokens: 500,
-//         top_p: 1,
-//         frequency_penalty: 1,
-//         presence_penalty: 1,
-//     });
-//     return response.data.choices[0].text;
-// };
+const GPTFunction = async (text) => {
+    const response = await openai.createCompletion({
+        model: "text-davinci-003",
+        prompt: text,
+        temperature: 0.7,
+        max_tokens: 500,
+        top_p: 1,
+        frequency_penalty: 1,
+        presence_penalty: 1,
+    });
+    return response.data.choices[0].text;
+};
 
-
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, "uploads");
-//     },
-//     filename: (req, file, cb) => {
-//         cb(null, Date.now() + path.extname(file.originalname));
-//     },
-// });
-
-// const upload = multer({
-//     storage: storage,
-//     limits: { fileSize: 1024 * 1024 * 5 },
-// });
 
 let database = [];
 
@@ -68,50 +49,7 @@ const remainderText = () => {
     return stringText;
 };
 
-app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
-    const {
-        fullName,
-        currentPosition,
-        currentLength,
-        currentTechnologies,
-        workHistory,
-    } = req.body;
-
-    workArray = JSON.parse(workHistory);
-    applicantName = fullName;
-    technologies = currentTechnologies;
-
-    const newEntry = {
-        id: generateID,
-        fullName,
-        image_url: `http://localhost:3001/uploads/${req.file.filename}`,
-        currentPosition,
-        currentLength,
-        currentTechnologies,
-        workHistory: workArray,
-    };
-
-
-
-    const prompt1 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} por (${currentLength} ano(s)). \n Eu desenvolvo em: ${currentTechnologies}. Você pode escrever uma descrição com até 100 palavras para o topo do meu currículo (escrita em primeira pessoa)?`;
-    const prompt2 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} por (${currentLength} ano(s)). \n Eu desenvolvo em: ${currentTechnologies}. Você pode escrever 10 pontos em que sou bom a partir dessas características?`;
-    const prompt3 = `Eu estou escrevendo um currículo. Minhas informações são: \n nome: ${fullName} \n cargo: ${currentPosition} por (${currentLength} ano(s)). \n Trabalhei em ${workArray.length
-        } empresa(s). ${remainderText()} \n Você pode escrever até 50 palavras para cada empresa de acordo com a minha função (em primeira pessoa)?`;
-
-    const objective = await GPTFunction(prompt1);
-    const keypoints = await GPTFunction(prompt2);
-    const jobResponsibilities = await GPTFunction(prompt3);
-    const chatgptData = { objective, keypoints, jobResponsibilities };
-
-
-    const data = { ...newEntry, ...chatgptData };
-    database.push(data);
-
-    res.json({
-        message: "Request successful!",
-        data,
-    });
-});
+app.post("/resume/create", upload.single("headshotImage"), resumeController.createResume);
 
 app.post("/resume/send", upload.single("resume"), async (req, res) => {
     const {

@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Loading from './Loading';
 
 function Home({ setResult }) {

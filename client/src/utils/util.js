@@ -2,8 +2,8 @@
 /* eslint-disable no-alert */
 /* eslint-disable camelcase */
 
-import axios from 'axios';
 import emailjs from '@emailjs/browser';
+import axios from 'axios';
 
 const env = require('../env.json');
 
