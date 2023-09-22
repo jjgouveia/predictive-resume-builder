@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Loading from './Loading';
 import sendResume from '../utils/util';
+import Loading from './Loading';
 
 function SendResume() {
   const [companyName, setCompanyName] = useState('');

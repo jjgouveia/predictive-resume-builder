@@ -3,11 +3,8 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const crypto = require("crypto");
-const { default: GPTFunction } = require('./core/functions/gptFunction');
 const upload = require('./core/functions/multerUtils');
-const swaggerDocs = require('./swagger-docs');
-const swaggerUi = require('swagger-ui-express');
-
+const { OpenAIApi, Configuration } = require('openai');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -18,28 +15,25 @@ let workArray = []
 let applicantName = ""
 let technologies = ""
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
-
 const generateID = crypto.randomUUID({ disableEntropyCache: true })
-// const configuration = new Configuration({
-//     apiKey: process.env.OPEN_AI_TOKEN,
-// });
+const configuration = new Configuration({
+    apiKey: process.env.OPEN_AI_TOKEN,
+});
 
-// const openai = new OpenAIApi(configuration);
+const openai = new OpenAIApi(configuration);
 
-// const GPTFunction = async (text) => {
-//     const response = await openai.createCompletion({
-//         model: "text-davinci-003",
-//         prompt: text,
-//         temperature: 0.7,
-//         max_tokens: 500,
-//         top_p: 1,
-//         frequency_penalty: 1,
-//         presence_penalty: 1,
-//     });
-//     return response.data.choices[0].text;
-// };
+const GPTFunction = async (text) => {
+    const response = await openai.createCompletion({
+        model: "text-davinci-003",
+        prompt: text,
+        temperature: 0.7,
+        max_tokens: 500,
+        top_p: 1,
+        frequency_penalty: 1,
+        presence_penalty: 1,
+    });
+    return response.data.choices[0].text;
+};
 
 
 // const storage = multer.diskStorage({
