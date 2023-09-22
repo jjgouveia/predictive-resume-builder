@@ -16,8 +16,8 @@ const GPTFunction = async (text) => {
     const response = await openai.createCompletion({
         model: "text-davinci-003",
         prompt: text,
-        temperature: 0.7,
-        max_tokens: 500,
+        temperature: 0.6,
+        max_tokens: 600,
         top_p: 1,
         frequency_penalty: 1,
         presence_penalty: 1,
@@ -84,7 +84,6 @@ module.exports = {
             data,
         });
     },
-
 
     async sendResume (req, res) {
         const {

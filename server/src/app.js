@@ -12,42 +12,6 @@ app.use(express.json());
 app.use(cors());
 app.use("/uploads", express.static("uploads"));
 
-let workArray = []
-let applicantName = ""
-let technologies = ""
-
-const generateID = crypto.randomUUID({ disableEntropyCache: true })
-const configuration = new Configuration({
-    apiKey: process.env.OPEN_AI_TOKEN,
-});
-
-const openai = new OpenAIApi(configuration);
-
-const GPTFunction = async (text) => {
-    const response = await openai.createCompletion({
-        model: "text-davinci-003",
-        prompt: text,
-        temperature: 0.7,
-        max_tokens: 500,
-        top_p: 1,
-        frequency_penalty: 1,
-        presence_penalty: 1,
-    });
-    return response.data.choices[0].text;
-};
-
-
-let database = [];
-
-
-
-const remainderText = () => {
-    let stringText = "";
-    for (let i = 0; i < workArray.length; i++) {
-        stringText += ` ${workArray[i].name} como ${workArray[i].position}.`;
-    }
-    return stringText;
-};
 
 app.post("/resume/create", upload.single("headshotImage"), resumeController.createResume);
 
