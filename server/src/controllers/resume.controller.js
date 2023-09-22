@@ -1,5 +1,6 @@
 const crypto = require("crypto");
 const { OpenAIApi, Configuration } = require('openai');
+require('dotenv').config();
 
 let workArray = []
 let applicantName = ""
