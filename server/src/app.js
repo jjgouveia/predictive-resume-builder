@@ -16,7 +16,7 @@ app.post("/resume/send", upload.single("resume"), maestro(resumeController.sendR
 
 app.get("/stellaris", (_req, res) => {
     res.status(418).json({
-        message: "ResumeAI is a Stellaris creation. Enjoy it!",
+        message: "ResumeAI is a Stellaria creation. Enjoy it!",
     });
 });
 

@@ -11,7 +11,6 @@ function Home({ setResult }) {
   const [currentPosition, setCurrentPosition] = useState('');
   const [currentLength, setCurrentLength] = useState(1);
   const [currentTechnologies, setCurrentTechnologies] = useState('');
-  const [headshot, setHeadshot] = useState(null);
   const [loading, setLoading] = useState(false);
   const [companyInfo, setCompanyInfo] = useState([{ name: '', position: '' }]);
   const navigate = useNavigate();
@@ -20,7 +19,6 @@ function Home({ setResult }) {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append('headshotImage', headshot, headshot.name);
     formData.append('fullName', fullName);
     formData.append('currentPosition', currentPosition);
     formData.append('currentLength', currentLength);
@@ -38,16 +36,13 @@ function Home({ setResult }) {
     setLoading(true);
   };
 
-  // 👇🏻 updates the state with user's input
   const handleAddCompany = () => setCompanyInfo([...companyInfo, { name: '', position: '' }]);
 
-  // 👇🏻 removes a selected item from the list
   const handleRemoveCompany = (index) => {
     const list = [...companyInfo];
     list.splice(index, 1);
     setCompanyInfo(list);
   };
-    // 👇🏻 updates an item within the list
   const handleUpdateCompany = (e, index) => {
     const { name, value } = e.target;
     const list = [...companyInfo];
@@ -60,8 +55,8 @@ function Home({ setResult }) {
   }
   return (
     <div className="app">
-      <h1>Cirrus</h1>
-      <p>Gerador de currículo com GPT-3</p>
+      <h1 className="text-2xl">ResumeAI</h1>
+      <p className="text-red-500">Seu criador de currículos com IA</p>
       <form
         onSubmit={handleFormSubmit}
         method="POST"
@@ -76,6 +71,13 @@ function Home({ setResult }) {
             id="fullName"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
+            style={{
+              width: '100%',
+              height: '30px',
+              borderRadius: '5px',
+              border: '1px solid #ccc',
+              padding: '4px',
+            }}
           />
         </label>
         <div className="nestedContainer">
@@ -119,17 +121,6 @@ function Home({ setResult }) {
             </label>
           </div>
         </div>
-        <label htmlFor="photo">
-          Upload da foto de perfil
-          <input
-            type="file"
-            name="photo"
-            required
-            id="photo"
-            accept="image/x-png,image/jpeg"
-            onChange={(e) => setHeadshot(e.target.files[0])}
-          />
-        </label>
 
         {companyInfo.map((company, index) => (
           <div className="nestedContainer" key={company}>

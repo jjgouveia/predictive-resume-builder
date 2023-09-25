@@ -10,7 +10,7 @@ function Resume({ result }) {
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-    documentTitle: `${result.fullName} Currículo`,
+    documentTitle: `${result.fullName.toLowerCase().replace(' ', '-')}-resume}`,
     onAfterPrint: () => alert('Print Successful!'),
   });
 
@@ -45,13 +45,13 @@ function Resume({ result }) {
               ano(s) de experiência
             </p>
           </div>
-          <div>
+          {/* <div>
             <img
               src={result.image_url}
               alt={result.fullName}
               className="resumeImage"
             />
-          </div>
+          </div> */}
         </header>
         <div className="resumeBody">
           <div>

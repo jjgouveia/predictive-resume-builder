@@ -58,7 +58,7 @@ module.exports = {
         const newEntry = {
             id: generateID,
             fullName,
-            image_url: `http://localhost:3001/uploads/${req.file.filename}`,
+            // image_url: `http://localhost:3001/uploads/${req.file.filename}`,
             currentPosition,
             currentLength,
             currentTechnologies,
