@@ -19,7 +19,7 @@ export default function Footer() {
             {' '}
           </a>
         </div>
-        <div className="flex space-x-4 pb-4 sm:pb-0">
+        <div className="flex space-x-4 pb-4 sm:pb-2">
           <a
             href="https://www.linkedin.com/in/jarbasgouveia/"
             className="group"
