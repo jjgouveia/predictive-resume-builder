@@ -15,7 +15,7 @@ export default function Footer() {
             className="font-bold hover:underline transition underline-offset-2"
             title="ChatGPT"
           >
-            OpenAPI
+            Stellaria
             {' '}
           </a>
         </div>

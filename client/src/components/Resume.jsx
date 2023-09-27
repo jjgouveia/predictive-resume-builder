@@ -10,7 +10,7 @@ function Resume({ result }) {
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-    documentTitle: `${result.fullName.toLowerCase().replace(' ', '-')}-resume}`,
+    documentTitle: `${result.fullName}-resume}`,
     onAfterPrint: () => alert('Print Successful!'),
   });
 

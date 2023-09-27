@@ -46,9 +46,13 @@ function SendResume() {
   };
 
   return (
-    <div className="app">
+    <div className="flex flex-1 w-full flex-col items-center justify-center px-4 mt-0 sm:mt-0 mb-10">
       <h1 className="resume__title">Enviar currículo por email</h1>
-      <form onSubmit={handleFormSubmit} encType="multipart/form-data">
+      <form
+        onSubmit={handleFormSubmit}
+        encType="multipart/form-data"
+        className="max-w-xl w-full"
+      >
         <div className="nestedContainer">
           <div className="nestedItem">
             <label htmlFor="myName">
@@ -154,6 +158,7 @@ function SendResume() {
         <button type="submit" className="sendEmailBtn">Enviar Email</button>
       </form>
     </div>
+
   );
 }
 

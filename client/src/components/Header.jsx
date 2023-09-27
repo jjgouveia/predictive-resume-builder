@@ -1,9 +1,18 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
+  const navigate = useNavigate();
   return (
     <header className="flex justify-between items-center w-full mt-2 pb-1 sm:px-4 px-2">
-      <a href="/" className="flex space-x-3">
+      <div
+        onClick={
+        () => navigate('/')
+      }
+        role="button"
+        tabIndex={0}
+        onKeyDown={() => navigate('/')}
+      >
         {/* <img
           alt="header text"
           src="/handshake.svg"
@@ -16,7 +25,7 @@ export default function Header() {
           {' '}
           <span className="text-sm text-slate-400">beta</span>
         </h1>
-      </a>
+      </div>
     </header>
   );
 }
