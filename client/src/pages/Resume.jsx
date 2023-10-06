@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
-import ErrorPage from './ErrorPage';
+import ErrorPage from '../components/ErrorPage';
 
 function Resume({ result }) {
   const componentRef = useRef();
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-    documentTitle: `${result.fullName} Currículo`,
+    documentTitle: `${result.fullName}-resume}`,
     onAfterPrint: () => alert('Print Successful!'),
   });
 
@@ -21,7 +21,8 @@ function Resume({ result }) {
   }
 
   return (
-    <>
+    <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
+
       <div className="buttonGroup">
         <button type="button" onClick={handlePrint}>Imprimir</button>
         <Link to="/send/resume" className="sendEmail">
@@ -45,13 +46,13 @@ function Resume({ result }) {
               ano(s) de experiência
             </p>
           </div>
-          <div>
+          {/* <div>
             <img
               src={result.image_url}
               alt={result.fullName}
               className="resumeImage"
             />
-          </div>
+          </div> */}
         </header>
         <div className="resumeBody">
           <div>
@@ -95,7 +96,9 @@ function Resume({ result }) {
           </div>
         </div>
       </main>
-    </>
+
+    </div>
+
   );
 }
 

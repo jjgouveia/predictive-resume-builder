@@ -4,7 +4,7 @@ const swaggerOptions = {
   swaggerDefinition: {
     info: {
       title: 'ResumeAI API',
-      description: 'ResumeAI Information',
+      description: 'REST Platform documentation',
       servers: ['http://localhost:3001'],
     },
     // securityDefinitions: {
